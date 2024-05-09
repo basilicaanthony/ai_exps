@@ -1,0 +1,53 @@
+import random
+import math
+
+class NQueensLocalSearch:
+    def __init__(self, n):
+        self.n = n
+        self.queens = list(range(n))
+        random.shuffle(self.queens)
+
+    def solve(self):
+        conflicts = self.count_conflicts(self.queens)
+        while conflicts > 0:
+            random_index1 = random.randint(0, self.n - 1)
+            random_index2 = random.randint(0, self.n - 1)
+            self.queens[random_index1], self.queens[random_index2] = self.queens[random_index2], self.queens[random_index1]
+            new_conflicts = self.count_conflicts(self.queens)
+            if new_conflicts < conflicts:
+                conflicts = new_conflicts
+            else:
+                self.queens[random_index1], self.queens[random_index2] = self.queens[random_index2], self.queens[random_index1]
+
+    def count_conflicts(self, queens):
+        conflicts = 0
+        for i in range(self.n):
+            for j in range(i + 1, self.n):
+                if queens[i] == queens[j] or abs(queens[i] - queens[j]) == abs(i - j):
+                    conflicts += 1
+        return conflicts
+
+    def print_solution(self):
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.queens[i] == j:
+                    print("Q ", end="")
+                else:
+                    print(". ", end="")
+            print()
+
+if __name__ == "__main__":
+    n = 8  # Change this to the desired size of the chessboard
+    n_queens = NQueensLocalSearch(n)
+    n_queens.solve()
+    n_queens.print_solution()
+
+//output
+Q . . . . . . . 
+. . . . . . . Q 
+. . . . . Q . . 
+. . . . . . Q . 
+. . Q . . . . . 
+. . . . . . . Q 
+. . . . Q . . . 
+. Q . . . . . . 
